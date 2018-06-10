@@ -1,6 +1,6 @@
 #include <ctype.h>
 #include <stdio.h> /* defines EOF */
-#define BUFSIZE 100
+#define BUFSIZE 1000
 
 /* Page 136 of K&R book */
 int getword(char *word, FILE *fp,int lim){
@@ -8,7 +8,7 @@ int getword(char *word, FILE *fp,int lim){
 	void ungetch(int);
 	char *w=word;
 
-	while (isspace(c = getc(fp)))
+	while (isspace(c = tolower(getc(fp))))
 		;
 	if (c != EOF)
 		*w++ = c;
@@ -17,7 +17,7 @@ int getword(char *word, FILE *fp,int lim){
 		return c;
 	}	
 	for ( ; --lim > 0; w++)
-		if (!isalnum(*w = getc(fp))) {
+		if (!isalnum(*w = tolower(getc(fp))) && *w != '_') {
 			ungetch(*w);
 			break;
 		}

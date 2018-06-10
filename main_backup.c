@@ -31,32 +31,17 @@ int main(int argc, char *argv[]){
 
 	char *charTable[MAXGROUPS];
 	int rowPos = 0;
-	int *pptr=&rowPos; 
+	int *pptr=&rowPos; /* Pointer to pointer */
 	/* for storing parsed taxo groups */
 	char word[MAXWORD];
-
-	for (int i = 0; i< MAXGROUPS; i++){
-		charTable[i] = NULL;
-	}
-
 	Parse_Newick(pptr,charTable,fp,vocab_array,vocab_size,word);
 	fclose(fp);
 	
-	for (int k = 0; k < vocab_size; k++){
-		printf("%s \n",vocab_array[k]);
-	}
-	int j = 1; /* This excludes the first charRow of the array, which corresponds to all 1 */
-	int b;
+	int j = 2; /* This excludes the first charRow of the array, which corresponds to all 1 */
 	while(charTable[j] != NULL){
 		printf("%s \n",(charTable[j++]));
-		for (b = 0; b < vocab_size; b++){
-			if (charTable[j-1][b]=='1')
-				printf("%s \t",vocab_array[b]);	
-		}
-		printf("\n");
 	}
 
-	
 	return 0;
 
 	/* To check vocab_array is populated right 
@@ -82,7 +67,7 @@ void Parse_Newick(int *pptr,char *charTable[], FILE *fp, char *vocab_array[], in
 
 	char c;
 	int i = 0; /* for adding chars to word */
-	while ((c = tolower(getc(fp))) != ')'){
+	while ((c = getc(fp)) != ')'){
 		/* printf("%i \n",*pptr); */
 		if (c=='('){
 			/* Recursive call here */
@@ -102,7 +87,7 @@ void Parse_Newick(int *pptr,char *charTable[], FILE *fp, char *vocab_array[], in
 			/* printf("Word: %s at pos %i \n",word,pos); */
 			i=0;	
 		}
-		else if (isalnum(c) || c == '_') {
+		else if (isalnum(c) || c == '_') {
 			word[i++] = c;
 		}
 		else if (c == EOF)
