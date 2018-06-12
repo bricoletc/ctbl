@@ -1,5 +1,5 @@
-#define MAXGROUPS 200
 #define MAXSPP 200
+#define MAXGROUPS MAXSPP *2
 #include "vocab_funcs.h"
 #include "binsearch.h"
 
@@ -42,28 +42,34 @@ int main(int argc, char *argv[]){
 	Parse_Newick(pptr,charTable,fp,vocab_array,vocab_size,word);
 	fclose(fp);
 	
+	/*
 	for (int k = 0; k < vocab_size; k++){
 		printf("%s \n",vocab_array[k]);
 	}
-	int j = 1; /* This excludes the first charRow of the array, which corresponds to all 1 */
+	*/
+	int j = 2; /* This excludes the first charRow of the array, which corresponds to all 1 */
 	int b;
 	while(charTable[j] != NULL){
 		printf("%s \n",(charTable[j++]));
+			
 		for (b = 0; b < vocab_size; b++){
 			if (charTable[j-1][b]=='1')
 				printf("%s \t",vocab_array[b]);	
 		}
 		printf("\n");
+		
+
 	}
-
-	
-	return 0;
-
-	/* To check vocab_array is populated right 
-	   for (int i = 0; i< vocab_size; i++)
-		printf("%s \n",vocab_array[i]);	
+	/*
+	printf("Nb species: %i \t Nb of character rows: %i \n",vocab_size,rowPos); 
 	*/
+	
 
+	/* To check vocab_array is populated right */ 
+	/*   for (int i = 0; i< vocab_size; i++)
+		printf("%s \n",vocab_array[i]);	
+	*/	
+	return 0;
 
 	/* Test binsearch in vocab_array
 	int found;
@@ -80,20 +86,20 @@ void Parse_Newick(int *pptr,char *charTable[], FILE *fp, char *vocab_array[], in
 	}
 	charRow[vocab_size] = '\0';
 
+	int point_of_insertion = *pptr;
 	char c;
 	int i = 0; /* for adding chars to word */
-	while ((c = tolower(getc(fp))) != ')'){
+	while ((c = getc(fp)) != ')'){
 		/* printf("%i \n",*pptr); */
 		if (c=='('){
 			/* Recursive call here */
-			(*pptr)++;
+			int point_of_copy = ++(*pptr);
 			Parse_Newick(pptr, charTable, fp, vocab_array, vocab_size, word);
 			
 			for (int j=0;j < vocab_size;j++){
-				if (charTable[*pptr][j]=='1' && charRow[j]=='0')
+				if (charTable[point_of_copy][j]=='1' && charRow[j]=='0')
 					charRow[j]='1';
 			}	
-			(*pptr)--;
 		}
 		else if (c==',' && i != 0){
 			word[i]='\0';
@@ -113,7 +119,7 @@ void Parse_Newick(int *pptr,char *charTable[], FILE *fp, char *vocab_array[], in
 	int pos=binsearch(word,vocab_array,vocab_size);
 	charRow[pos]='1';
 	i = 0;
-	charTable[*pptr]=strdup(charRow); /* Attach the character row to the character table */	
+	charTable[point_of_insertion]=strdup(charRow); /* Attach the character row to the character table */	
 	/* printf("%s \n",charRow); */ 
 }
 

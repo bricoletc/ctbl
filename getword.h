@@ -8,7 +8,7 @@ int getword(char *word, FILE *fp,int lim){
 	void ungetch(int);
 	char *w=word;
 
-	while (isspace(c = tolower(getc(fp))))
+	while (isspace(c = getc(fp)))
 		;
 	if (c != EOF)
 		*w++ = c;
@@ -17,7 +17,7 @@ int getword(char *word, FILE *fp,int lim){
 		return c;
 	}	
 	for ( ; --lim > 0; w++)
-		if (!isalnum(*w = tolower(getc(fp))) && *w != '_') {
+		if (!isalnum(*w = getc(fp)) && *w != '_') {
 			ungetch(*w);
 			break;
 		}
