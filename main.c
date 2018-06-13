@@ -50,14 +50,14 @@ int main(int argc, char *argv[]){
 	int j = 2; /* This excludes the first charRow of the array, which corresponds to all 1 */
 	int b;
 	while(charTable[j] != NULL){
-		printf("%s \n",(charTable[j++]));
-			
+		printf("%s\n",(charTable[j++]));
+		/*
 		for (b = 0; b < vocab_size; b++){
 			if (charTable[j-1][b]=='1')
 				printf("%s \t",vocab_array[b]);	
 		}
 		printf("\n");
-		
+		*/
 
 	}
 	/*
@@ -66,9 +66,10 @@ int main(int argc, char *argv[]){
 	
 
 	/* To check vocab_array is populated right */ 
-	/*   for (int i = 0; i< vocab_size; i++)
+		/*
+	   for (int i = 0; i< vocab_size; i++)
 		printf("%s \n",vocab_array[i]);	
-	*/	
+		*/
 	return 0;
 
 	/* Test binsearch in vocab_array
